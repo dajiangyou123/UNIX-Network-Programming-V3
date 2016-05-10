@@ -16,11 +16,15 @@
 
 #define MAXLINE 1024 
 
+
+
 int daemon_proc;              //若该数为0，则将出错信息直接打印到屏幕，若该数为1，则调用syslog()函数，由其决定.
 
 void err_quit(const char *fmt,...);
 void err_sys(const char* fmt,...);
 static void err_doit(int,int,const char*,va_list);
+
+
 
 void err_quit(const char *fmt,...)
 {
@@ -76,6 +80,7 @@ static void err_doit(int errnoflag,int level,const char *fmt,va_list ap)
 	}
 	return;
 }
+
 
 
 #endif
