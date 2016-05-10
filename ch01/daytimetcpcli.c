@@ -29,6 +29,7 @@ int main(int argc,char **argv)
 	servaddr.sin_port = htons(13);
 
 	//将字符串类型转换成套接字地址结构中的二进制值
+	//最后一个参数若改成servaddr.sin_addr.s_addr也是正确的，但是切记servaddr.sin_addr是一个结构体，而servaddr.sin_addr.s_addr是一个无符号的32位整数（一般都是的）。
 	if(inet_pton(AF_INET,argv[1],&servaddr.sin_addr) <= 0)
 		err_quit("inet_pton error for %s",argv[1]);
 	
