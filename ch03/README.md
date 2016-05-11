@@ -1,18 +1,18 @@
 ###1.网际协议(IP协议)使用大端字节序来传送多字节整数.
 
 ###2.主机字节序与网络字节序直接的转换函数如下
-	
-	#include <netinet/in.h>
+```C
+#include <netinet/in.h>
 
-	uint16_t htons(uint16_t host16bitvalue);
-	uint32_t htonl(uint32_t host32bitvalue);
-							//均返回：网络字节序的值
+uint16_t htons(uint16_t host16bitvalue);
+uint32_t htonl(uint32_t host32bitvalue);
+						//均返回：网络字节序的值
 	
 
-	uint16_t ntohs(uint16_t net16bitvalue);
-	uint32_t ntohl(uint32_t net32bitvalue);
-							//均返回：主机字节序的值
-	
+uint16_t ntohs(uint16_t net16bitvalue);
+uint32_t ntohl(uint32_t net32bitvalue);
+						//均返回：主机字节序的值
+```	
 * *注*：h表示host，n表示network，s代表short，l代表long。如今s视为一个16位的值（例如TCP或UDP的端口号），l视为一个32位的值（例如IPv4地址，**哪怕有些机器上long为64位，此处这些函数中操作的也仍然是32位的值**）。
 
 ###3.字节操纵函数如下
@@ -66,3 +66,8 @@
 			作用：与上面的刚刚相反，将数值格式（addrptr,网络字节序二进制格式）转换成表达格式（strptr,点分十进制格式），len是表示存储的单元大小，防止缓冲区溢出；
 			返回：若成功则为指向结果的指针，若出错则为NULL。
 	
+###6.地址转换函数总结
+* **IPv4点分十进制格式值** -> **网络字节序二进制值** : inet_pton(AF_INET), inet_aton, inet_addr;
+* **网络字节序二进制值** -> **IPv4点分十进制格式值** : inet_ntop(AF_INET), inet_ntoa;
+
+
