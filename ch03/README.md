@@ -13,7 +13,7 @@
 	uint32_t ntohl(uint32_t net32bitvalue);
 							//均返回：主机字节序的值
 	
-  *注*：h表示host，n表示network，s代表short，l代表long。如今s视为一个16位的值（例如TCP或UDP的端口号），l视为一个32位的值（例如IPv4地址，哪怕有些机器上long为64位，此处这些函数中操作的也仍然是32位的值）。
+* *注*：h表示host，n表示network，s代表short，l代表long。如今s视为一个16位的值（例如TCP或UDP的端口号），l视为一个32位的值（例如IPv4地址，**哪怕有些机器上long为64位，此处这些函数中操作的也仍然是32位的值**）。
 
 ###3.字节操纵函数如下
 	
