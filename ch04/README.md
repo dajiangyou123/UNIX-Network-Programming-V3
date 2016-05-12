@@ -82,7 +82,8 @@ int bind(int sockfd, const struct *myaddr, socklen_t addrlen);
 		//返回：若成功则为0，若出错则为-1。
 ```
 
-bind函数绑定端口号和IP地址  
+bind函数绑定端口号和IP地址的方式  
+
 |IP地址   |端口 |结果   |
 |:-------:|:---:|:-----:|
 |通配地址 |非0  |内核选择IP地址，进程指定端口 |
