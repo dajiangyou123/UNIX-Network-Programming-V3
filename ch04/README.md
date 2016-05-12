@@ -10,7 +10,7 @@ int socket(int family, int type, int protocol);
 ```
 
 ###2.socket函数中的family, type, protocol常值含义
-* *family*常值
+* *family*常值  
 |family |说 明|
 |:-----:|:---:|
 |AF_INET |IPv4协议 |
@@ -19,7 +19,7 @@ int socket(int family, int type, int protocol);
 |AF_ROUTE |路由套接字 |
 |AF_KEY |密钥套接字 |
 
-* *type*常值
+* *type*常值  
 |family |说 明|
 |:-----:|:---:|
 |SOCK_STREAM |字节流套接字 |
@@ -27,14 +27,14 @@ int socket(int family, int type, int protocol);
 |SOCK_SEQPACKET |有序分组套接字 |
 |SOCK_RAW |原始套接字 |
 
-* AF_INET和AF_INET6的*protocol*常值
+* AF_INET和AF_INET6的*protocol*常值  
 |protocol |说 明|
 |:-----:|:---:|
 |IPPROTO_TCP |TCP传输协议 |
 |IPPROTO_UDP |UDP传输协议 |
 |IPPROTO_SCTP |SCTP传输协议 |
 
-* socket函数中*family*和*type*参数的组合
+* socket函数中*family*和*type*参数的组合  
 |　	  |AF_INET |AF_INET6 |AF_LOCAL |AF_ROUTE |AF_KEY |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |**SOCK_STREAM**| TCP/SCTP | TCP/SCTP | 是 |  |  |
