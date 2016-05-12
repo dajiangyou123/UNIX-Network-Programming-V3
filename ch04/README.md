@@ -63,15 +63,15 @@ int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 1. 若TCP客户在一定时间内**多次重发**并等待之后还没有收到SYN分节的响应，则返回ETIMEDOUT错误；  
 2. 若服务器对客户的SYN响应时RST（表示复位），则表明该服务器主机在我们指定的端口上没有相关进程正在等待连接.  
 这是一种硬错误（hard error)，客户一接收到RST就**马上返回**ECONNREFUSED错误，**不会进行再次重发**。  
-> RST是TCP在发生错误时发送的一种TCP分节。产生的三个条件是：
+3. 若客户发出的SYN在中间的某个路由器上引发了一个"destination unreachable"(目的地不可达)ICMP错误，则认为是一种软错误（soft error）。   
+**处理方式与情况1类似**，最后将ICMP错误信息作为EHOSTUNREACH或ENETUNREACH错误返回给进程。   
+> 引发该错误的可能性还有：一是按照本地系统的转发表，根本没有到达远程系统的路径；二是connect调用根本不等待就返回。
+
+*注*：
+> RST是TCP在发生错误时发送的一种TCP分节。产生的三个条件是：  
 1)目的地为某端口的SYN到达，然而该端口上没有正在监听的服务器；  
 2)TCP想取消一个已有连接：  
 3)客户一接收到一个根本不存在的连接上的分节。  
-
-3. 若客户发出的SYN在中间的某个路由器上引发了一个"destination unreachable"(目的地不可达)ICMP错误，则认为是一种软错误（soft error）。   
-**处理方式与情况1类似**，最后将ICMP错误信息作为EHOSTUNREACH或ENETUNREACH错误返回给进程。   
->  引发该错误的可能性还有：一是按照本地系统的转发表，根本没有到达远程系统的路径；二是connect调用根本不等待就返回。
-
 
 ###4. bind函数
 
