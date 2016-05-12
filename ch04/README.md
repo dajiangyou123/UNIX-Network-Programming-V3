@@ -73,7 +73,24 @@ int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 2)TCP想取消一个已有连接：  
 3)客户一接收到一个根本不存在的连接上的分节。  
 
-###4. bind函数
 
+###4. bind函数
+```C
+#include <sys/socket.h>
+int bind(int sockfd, const struct *myaddr, socklen_t addrlen);
+		//作用：把一个本地协议地址（IP地址+端口号）赋予一个套接字；
+		//返回：若成功则为0，若出错则为-1。
+```
+
+bind函数绑定端口号和IP地址  
+|IP地址   |端口 |结果   |
+|:-------:|:---:|:-----:|
+|通配地址 |非0  |内核选择IP地址，进程指定端口 |
+|本地IP地址 |0  |进程指定IP地址，内核选择端口 |
+|本地IP地址 |非0|进程指定IP地址和端口         |
+
+> 内核选择IP地址的方法：  
+对于TCP客户来说，当连接套接字时，内核将根据所用外出网络接口来选择源IP地址，而所用外出接口则取决于到达服务器所需的路径;    
+对于TCP服务器来说，内核把客户发来的SYN中目的IP地址作为服务器的源IP地址。  
 
 
