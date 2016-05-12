@@ -43,11 +43,11 @@ int memcmp(const void *ptrl, const void *ptr2, size_t nbytes);	//比较两个字
 #include <arpa/inet.h>
 
 int inet_aton(const char *strptr, struct in_addr *addrptr);
-		//作用：将strptr所指的点分十进制类型的字符串转换成一个32位的网络字节序二进制值，并通过addrptr指针来存储；
+		//作用：将strptr所指的点分十进制类型(0x开头或者0开头的十六和八进制也可以,且也可以不需要加上小数点)的字符串转换成一个32位的网络字节序二进制值，并通过addrptr指针来存储；
 		//返回：若字符串有效，则返回1（此时若addrptr是空指针，也会返回1）,否则返回0。
 
 in_addr_t inet_addr(const char *strptr);
-		//作用：作用同上；
+		//作用：作用同上(0x开头或者0开头的十六和八进制也可以,且也可以不需要加上小数点);
 		//返回：若字符串有效则返回32位二进制网络字节序的IPv4地址，否则返回INADDR_NONE。此处的INADDR_NONE通常为32位全是1的值，意味着这个函数不可以处理IP地址为255.255.255.255的点分十进制数串。如今inet_addr已被弃用，新代码改用inet_aton函数。
 
 char *inet_ntoa(struct in_addr inaddr);
@@ -60,7 +60,7 @@ char *inet_ntoa(struct in_addr inaddr);
 #include <arpa/inet.h>
 	
 int inet_pton(int family, const char *strptr, void *addrptr);	
-		//作用：将strptr所指的字符串转换成网络字节序的二进制值，并由addrptr所指的地址保存. P代表着表达（presentation），n代表着数值（numeric）。
+		//作用：将strptr所指的字符串(只能是十进制的,且必须是三个小数点间隔)转换成网络字节序的二进制值，并由addrptr所指的地址保存. P代表着表达（presentation），n代表着数值（numeric）。
 		//返回：若成功则返回1，若输入不是有效的表达格式则为0，若出错则为-1。
 
 const char *inet_ntop(int family, const void *addrptr, char *strptr, size_t len);
