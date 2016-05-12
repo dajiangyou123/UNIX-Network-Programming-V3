@@ -9,6 +9,7 @@ int socket(int family, int type, int protocol);
 */
 ```
 
+
 ###2.socket函数中的family, type, protocol常值含义
 * *family*常值  
 
@@ -31,7 +32,7 @@ int socket(int family, int type, int protocol);
 |SOCK_RAW |原始套接字 |
 
 
-* AF_INET和AF_INET6的*protocol*常值  
+* **AF_INET**和**AF_INET6**的*protocol*常值  
 
 |protocol |说 明|
 |:-----:|:---:|
@@ -48,6 +49,31 @@ int socket(int family, int type, int protocol);
 |**SOCK_DGRAM**| UDP | UDP | 是 |  |  |
 |**SOCK_SEQPACKET**| SCTP | SCTP | 是 |  |  |
 |**SOCK_RAW**| IPv4 | IPv6 |  | 是 | 是 |
+
+
+###3. connect函数
+```C
+#include <sys/socket.h>
+int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
+		//作用：一般是由TCP客户用该函数来建立与TCP服务器的连接
+		//返回：若成功返回0，若出错返回-1
+```
+
+如果是TCP套接字，调用connect函数将激发TCP的**三次握手**过程，而且**仅在连接成功或出错时才返回**，其中出错的可能情况如下。  
+1. 若TCP客户在一定时间内**多次重发**并等待之后还没有收到SYN分节的响应，则返回ETIMEDOUT错误；  
+2. 若服务器对客户的SYN响应时RST（表示复位），则表明该服务器主机在我们指定的端口上没有相关进程正在等待连接.  
+这是一种硬错误（hard error)，客户一接收到RST就**马上返回**ECONNREFUSED错误，**不会进行再次重发**。  
+> RST是TCP在发生错误时发送的一种TCP分节。产生的三个条件是：
+1)目的地为某端口的SYN到达，然而该端口上没有正在监听的服务器；  
+2)TCP想取消一个已有连接：  
+3)客户一接收到一个根本不存在的连接上的分节。  
+
+3. 若客户发出的SYN在中间的某个路由器上引发了一个"destination unreachable"(目的地不可达)ICMP错误，则认为是一种软错误（soft error）。   
+**处理方式与情况1类似**，最后将ICMP错误信息作为EHOSTUNREACH或ENETUNREACH错误返回给进程。   
+>  引发该错误的可能性还有：一是按照本地系统的转发表，根本没有到达远程系统的路径；二是connect调用根本不等待就返回。
+
+
+###4. bind函数
 
 
 
