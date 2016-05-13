@@ -65,8 +65,7 @@ int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 1. 若TCP客户在一定时间内**多次重发**并等待之后还没有收到SYN分节的响应，则返回ETIMEDOUT错误；  
 2. 若服务器对客户的SYN响应时RST（表示复位），则表明该服务器主机在我们指定的端口上没有相关进程正在等待连接.  
 这是一种硬错误（hard error)，客户一接收到RST就**马上返回**ECONNREFUSED错误，**不会进行再次重发**。  
-3. 若客户发出的SYN在中间的某个路由器上引发了一个"destination unreachable"(目的地不可达)ICMP错误，则认为是一种软错误（soft error）。   
-**处理方式与情况1类似**，最后将ICMP错误信息作为EHOSTUNREACH或ENETUNREACH错误返回给进程。   
+3. 若客户发出的SYN在中间的某个路由器上引发了一个"destination unreachable"(目的地不可达)ICMP错误，则认为是一种软错误（soft error）.**处理方式与情况1类似**，最后将ICMP错误信息作为EHOSTUNREACH或ENETUNREACH错误返回给进程。   
 > 引发该错误的可能性还有：一是按照本地系统的转发表，根本没有到达远程系统的路径；二是connect调用根本不等待就返回。
 
 *注*：
@@ -130,7 +129,40 @@ int accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen);
 		//返回：若成功则返回已连接套接字描述符（由内核自动生成的一个全新描述符），若出错则返回-1.
 ```
 
+> 若cliaddr与addrlen非空，可以得到客户的地址。若对客户协议地址不感兴趣，也可均置为空指针。
 
 
+###7. fork函数
+```C
+#include <unistd.h>
+pid_t fork(void);
+		//作用：创建子进程，父进程调用fork之前打开的所有描述符在fork返回之后由子进程共享。
+		//返回：子进程中返回0，父进程中返回子进程ID，若出错返回-1
+```
+
+> fork有两种典型用法。   
+* 一个进程创建一个自身的副本，然后各个副本做自己的工作,各司其职。
+* 一个进程想要执行另一个程序。在子进程中调用exec（6个函数,其实应该有7个）把自身替换成新的程序，对于exec之前的描述符默认是继续保持打开，也可以使用fcntl设置FD_CLOEXEC描述符标志将其描述符关闭。
+
+
+###8. exec函数
+```C
+#include <unistd.h>
+
+int execl(const char *pathname, const char *arg0, ... /* (char *)0 */);
+
+int execv(const char *pathname, char *const argv[]);
+
+int execle(const char *pathname, const char *arg0, ... /* (char *)0, char *const envp[] */);
+
+int execve(const char *pathname, char *const argv[], char *const envp[]);
+
+int execlp(const char *filename, const char *arg0, ... /* (char *)0 */);
+
+int execvp(const char *filename, char *const argv[]);
+
+int fexecve(int fd, char *const argv[], char *const envp[]);
+		//均返回：若成功则不返回，若出错则返回-1
+```
 
 
