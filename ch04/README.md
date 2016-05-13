@@ -74,6 +74,7 @@ int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 1)目的地为某端口的SYN到达，然而该端口上没有正在监听的服务器；  
 2)TCP想取消一个已有连接：  
 3)客户一接收到一个根本不存在的连接上的分节。  
+
 ---
 > TCP中，connect函数导致当前套接字从CLOSED状态（该套接字自socket函数以来一直所处的状态）转移到SYN_SENT状态，若成功则再转移到ESTABLISHED状态。
 若connect失败则该套接字不再可用，必须关闭。
@@ -100,6 +101,7 @@ bind函数绑定端口号和IP地址的方式
 对于TCP客户来说，当连接套接字时，内核将根据所用外出网络接口来选择源IP地址，而所用外出接口则取决于到达服务器所需的路径;    
 对于TCP服务器来说，内核把客户发来的SYN中目的IP地址作为服务器的源IP地址。  
 对于UDP而已，在套接字上发出数据报时才选择一个本地IP地址。   
+
 ---
 > 从bind函数返回的一个常见错误时EADDRINUSE（"Address already in use", 地址已使用）
 
@@ -108,7 +110,24 @@ bind函数绑定端口号和IP地址的方式
 ```C
 #include <sys/socket.h>
 int listen(int sockfd, int backlog);
-		//作用：
+		//作用：经由TCP服务器调用，把一个未连接的套接字转换成一个被动套接字，指示内核应接受指向该套接字的连接请求。同时，TCP状态从CLOSED状态转换到LISTEN状态。
+		//返回：若成功则为0，若出错则为-1。
+```
+
+对于listen函数中的*backlog*的含义，不同系统定义不一样，再说之前先说两个队列。   
+* 未完成连接队列：服务器收到了SYN分节，正等待完成TCP的三次握手。此时的套接字处于**SYN_RCVD状态**；
+* 已完成连接队列：已完成TCP三次握手的客户对应其中一项。此时的套接字处于**ESTABLISHED状态**。   
+对于backlog的含义，曾经被规定为这两个队列总和的最大值，但其实真正的实现中标准不一，它应该指定某个给定套接字上内核为之排队的最大已完成连接数。   
+
+> 对于*backlog*的设定，可以设定一个常值，但是修改其大小还需要重新编译服务器程序，故可以设置一个默认值，并允许通过命令行选项或环境变量覆写该默认值。    
+
+
+###6. accept函数
+```C
+#include <sys/socket.h>
+int accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen);
+		//作用：由TCP服务器调用，从已与客户完成三次握手的队列中返回一个已完成连接;
+		//返回：若成功则返回已连接套接字描述符（由内核自动生成的一个全新描述符），若出错则返回-1.
 ```
 
 
