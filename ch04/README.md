@@ -1,3 +1,5 @@
+#第 4 章  基本TCP套接字编程
+
 ###1.socket函数
 ```C
 #include <sys/socket.h>
@@ -56,7 +58,7 @@ int socket(int family, int type, int protocol);
 #include <sys/socket.h>
 int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 		//作用：一般是由TCP客户用该函数来建立与TCP服务器的连接
-		//返回：若成功返回0，若出错返回-1
+		//返回：若成功返回0，若出错返回-1.
 ```
 
 如果是TCP套接字，调用connect函数将激发TCP的**三次握手**过程，而且**仅在连接成功或出错时才返回**，其中出错的可能情况如下。  
@@ -72,6 +74,9 @@ int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 1)目的地为某端口的SYN到达，然而该端口上没有正在监听的服务器；  
 2)TCP想取消一个已有连接：  
 3)客户一接收到一个根本不存在的连接上的分节。  
+---
+> TCP中，connect函数导致当前套接字从CLOSED状态（该套接字自socket函数以来一直所处的状态）转移到SYN_SENT状态，若成功则再转移到ESTABLISHED状态。
+若connect失败则该套接字不再可用，必须关闭。
 
 
 ###4. bind函数
@@ -94,5 +99,19 @@ bind函数绑定端口号和IP地址的方式
 > 内核选择IP地址的方法：  
 对于TCP客户来说，当连接套接字时，内核将根据所用外出网络接口来选择源IP地址，而所用外出接口则取决于到达服务器所需的路径;    
 对于TCP服务器来说，内核把客户发来的SYN中目的IP地址作为服务器的源IP地址。  
+对于UDP而已，在套接字上发出数据报时才选择一个本地IP地址。   
+---
+> 从bind函数返回的一个常见错误时EADDRINUSE（"Address already in use", 地址已使用）
+
+
+###5. listen函数
+```C
+#include <sys/socket.h>
+int listen(int sockfd, int backlog);
+		//作用：
+```
+
+
+
 
 
