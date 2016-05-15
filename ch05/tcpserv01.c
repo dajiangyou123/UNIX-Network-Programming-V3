@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 		clilen = sizeof(cliaddr);
 		connfd = Accept(listenfd,(struct sockaddr *)&cliaddr,&clilen);
 
-		if((childpid = fork()) == 0)    //子进程
+		if((childpid = Fork()) == 0)    //子进程
 		{
 			Close(listenfd);           //关闭监听套接字 
 			str_echo(connfd);          //处理客户的请求
