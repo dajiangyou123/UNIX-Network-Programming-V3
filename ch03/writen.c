@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <errno.h>
 
-ssize_t writen(int fd, const void *vptr, size_t n)
+ssize_t Writen(int fd, const void *vptr, size_t n)
 {
 	size_t nleft;
 	ssize_t nwritten;

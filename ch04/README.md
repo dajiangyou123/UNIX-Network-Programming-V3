@@ -202,6 +202,6 @@ int getpeername(int sockfd, struct sockaddr *peeraddr, socklen_t *addrlen);
 
 ###11. 总结
 > TCP的状态转换：
-* 调用**conncet**函数使状态从*CLOSED*到*SYN_SENT*,若该函数成功返回，则状态变为*ESTABLISHED*；
+* 调用**connect**函数使状态从*CLOSED*到*SYN_SENT*,若该函数成功返回，则状态变为*ESTABLISHED*；
 * 调用**listen**函数，建立监听套接字，若接收到SYN但没有完成三次握手的状态是*SYN_RCVD*，完成三次握手后就变成了*ESTABLISHED*状态。
 
