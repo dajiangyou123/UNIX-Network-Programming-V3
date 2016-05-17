@@ -39,5 +39,6 @@ waitpid可以选择等待哪个子进程返回，也可以与wait一样，等待
 POSIX做出修改的**理由**是：流子系统（steams subsystem）中发生某些**致命**的协议相关事件时，也会返回EPROTO。故在POSIX中通过*检查错误代码是否是ECONNABORTED*来决定是否重启accept调用。
 
 
-
+###6. 服务器进程终止
+>  
 
