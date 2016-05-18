@@ -1,6 +1,7 @@
 //TCP回射，客户程序
 
 #include "ch05.h"
+#include "1.c"
 
 int main(int argc,char **argv)
 {

@@ -70,8 +70,9 @@ const char *inet_ntop(int family, const void *addrptr, char *strptr, size_t len)
 		//返回：若成功则为指向结果的指针，若出错则为NULL。
 ```
 	
-###6.地址转换函数总结
+###6.地址转换总结
 * **IPv4点分十进制格式值** -> **网络字节序二进制值** : inet_pton(AF_INET), inet_aton, inet_addr;
 * **网络字节序二进制值** -> **IPv4点分十进制格式值** : inet_ntop(AF_INET), inet_ntoa;
-
+* 主机字节序与网络字节序的不同仅仅是对于**多字节**的数值不一样，对于**单字节**的来说都是一样的，都是**从右到左，低位到高位**。
+所以网络之间传递ASCII文本是不需要考虑字节序不同的问题。
 
