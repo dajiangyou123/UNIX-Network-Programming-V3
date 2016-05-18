@@ -72,7 +72,7 @@ int connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 > RST是TCP在发生错误时发送的一种TCP分节。产生的三个条件是：  
 1)目的地为某端口的SYN到达，然而该端口上没有正在监听的服务器；  
 2)TCP想取消一个已有连接：  
-3)客户一接收到一个根本不存在的连接上的分节。  
+3)TCP接收到一个根本不存在的连接上的分节。  
 
 ---
 > TCP中，connect函数导致当前套接字从CLOSED状态（该套接字自socket函数以来一直所处的状态）转移到SYN_SENT状态，若成功则再转移到ESTABLISHED状态。
