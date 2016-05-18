@@ -26,7 +26,12 @@ void err_quit(const char *fmt,...);
 void err_sys(const char* fmt,...);
 static void err_doit(int,int,const char*,va_list);
 
+//服务器回射客户的函数
+void str_echo(int sockfd);
 
+
+//客户发送文本到服务器，并接受服务器发来的信息且打印到屏幕上
+void str_cli(FILE *fp, int sockfd);
 
 void err_quit(const char *fmt,...)
 {
@@ -187,7 +192,7 @@ ssize_t Writen(int fd, const void *vptr, size_t n)
 	ssize_t nwritten;
 	const char *ptr;
 	
-	ptr = vptr;
+	ptr = (char *)vptr;   //不强制转换也是对的
 	nleft = n;
 	while (nleft > 0)
 	{
@@ -205,23 +210,6 @@ ssize_t Writen(int fd, const void *vptr, size_t n)
 }
 
 
-//服务器回射客户的函数
-void str_echo(int sockfd)
-{
-	ssize_t n;
-	char buf[MAXLINE];
-
-again:
-	while((n = read(sockfd,buf,MAXLINE)) > 0)   //读取客户的内容
-		Writen(sockfd, buf, n);             //将内容回显给客户
-
-	if(n < 0 && errno == EINTR)
-		goto again;
-	else if(n < 0)
-		err_sys("str_echo: read error");
-
-	return;
-}
 
 //fgets包裹函数
 char *Fgets(char *buf, int n, FILE *fp)
@@ -240,7 +228,7 @@ ssize_t readline(int fd, void *vptr, size_t maxlen)
 	ssize_t n,rc;
 	char c,*ptr;
 
-	ptr = vptr;
+	ptr = (char *)vptr;
 
 	for(n = 1;n < maxlen;n++)
 	{
@@ -289,26 +277,5 @@ void Fputs(const char *str, FILE *fp)
 }
 
 
-//客户发送文本到服务器，并接受服务器发来的信息且打印到屏幕上
-void str_cli(FILE *fp, int sockfd)
-{
-	char sendline[MAXLINE], recvline[MAXLINE];
-	
-	while(Fgets(sendline,MAXLINE,fp) != NULL)   //读取一行
-	{
-		Writen(sockfd,sendline,strlen(sendline));  //发给服务器
-
-		//接受服务器信息
-	    //int n;
-        //if((n = read(sockfd,recvline,MAXLINE)) <= 0)      //直接使用read函数，而不是调用单字节读取文本函数
-		if(Readline(sockfd,recvline,MAXLINE) == 0)
-			err_quit("str_cli: server terminated prematurely");
-		//recvline[n]	= '\0';                             //直接调用read函数，末尾别忘了加'\0'
-		Fputs(recvline,stdout);
-
-	}
-
-	return;
-}
 
 #endif
