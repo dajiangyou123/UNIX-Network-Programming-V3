@@ -22,124 +22,47 @@
 
 int daemon_proc;              //若该数为0，则将出错信息直接打印到屏幕，若该数为1，则调用syslog()函数，由其决定.
 
-void err_quit(const char *fmt,...);
-void err_sys(const char* fmt,...);
-static void err_doit(int,int,const char*,va_list);
-
-//服务器回射客户的函数
-void str_echo(int sockfd);
-
-
-//客户发送文本到服务器，并接受服务器发来的信息且打印到屏幕上
-void str_cli(FILE *fp, int sockfd);
-
 //处理函数出错信息，但是不打印errno值所代表的含义
 void err_quit(const char *fmt,...);
 
-
 //处理函数出错信息，但是打印errno值所代表的含义
-void err_sys(const char *fmt,...);
+void err_sys(const char* fmt,...);
 
 //具体执行打印出错信息的函数
 static void err_doit(int errnoflag,int level,const char *fmt,va_list ap);
 
+//服务器回射客户的函数
+void str_echo(int sockfd);
+
+//客户发送文本到服务器，并接受服务器发来的信息且打印到屏幕上
+void str_cli(FILE *fp, int sockfd);
 
 //socket的包裹函数，缩短错误检查的程序
-int Socket(int family, int type, int protocol)
-{
-	int sockfd = socket(family,type,protocol);	
-	if(sockfd < 0)
-		err_sys("socket error");
-
-	return sockfd;
-}
+int Socket(int family, int type, int protocol);
 
 //connect的包裹函数
-void Connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen)
-{
-	if(connect(sockfd,servaddr,addrlen) < 0)
-		err_sys("connect error");
-
-	return;
-}
+void Connect(int sockfd, const struct sockaddr *servaddr, socklen_t addrlen);
 
 //bind的包裹函数
-void Bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen)
-{
-	if(bind(sockfd,myaddr,addrlen) < 0)
-		err_sys("bind error");
-	return;
-}
+void Bind(int sockfd, const struct sockaddr *myaddr, socklen_t addrlen);
 
 //listen的包裹函数
-void Listen(int sockfd, int backlog)
-{
-	//对于backlog值，可以通过设定环境变量进行取值，也可以选择一个常量进行取值
-	//当前服务器所在的系统中如果设置了LISTENQ环境变量，则取对应的值，若没有则取自己设定值
-
-	char *ptr;
-
-	//先取环境变量的值
-	if((ptr = getenv("LISTENQ")) != NULL)
-		backlog = atoi(ptr);
-
-	if(listen(sockfd,backlog) < 0)
-		err_sys("listen error");
-
-	return;
-}
+void Listen(int sockfd, int backlog);
 
 //accept的包裹函数
-int Accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen)
-{
-	int fd;
-	if((fd = accept(sockfd,cliaddr,addrlen)) < 0)
-		err_sys("accept error");
-
-	return fd;
-}
-
-
-//write的包裹函数，虽然write函数出错返回-1，但是若要求写的字节数没有写完，也会出错。
-void Write(int fd, const void *buf, size_t nbytes)
-{
-	if(write(fd,buf,nbytes) != nbytes)
-		err_sys("write error");
-
-	return;
-}
+int Accept(int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen);
 
 //close的包裹函数
-void Close(int fd)
-{
-	if(close(fd) < 0)
-		err_sys("close error");
+void Close(int fd);
 
-	return;
-}
+//write的包裹函数，虽然write函数出错返回-1，但是若要求写的字节数没有写完，也会出错。
+void Write(int fd, const void *buf, size_t nbytes);
 
 //fork的包裹函数
-pid_t Fork()
-{
-	pid_t pid = fork();
-	if(pid < 0)
-		err_sys("fork error");
-
-	return pid;
-}
+pid_t Fork();
 
 //inet_pton的包裹函数
-void Inet_pton(int family, const char *strptr, void *addrptr)
-{
-	int n;
-	n = inet_pton(family,strptr,addrptr);
-	if(n < -1)
-		err_sys("inet_pton error");
-	if(n == 0)
-		err_sys("Inet_pton: addr %s format error",strptr);
-
-	return;
-}
+void Inet_pton(int family, const char *strptr, void *addrptr);
 
 //往一个描述符写n个字节
 ssize_t Writen(int fd, const void *vptr, size_t n)
