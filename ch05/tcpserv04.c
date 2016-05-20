@@ -1,7 +1,7 @@
 //TCP回射服务器程序，多进程，加入信号处理机制，处理僵尸进程，同时对于多个子进程同时终止的处理.
 //加入了对被信号中断的系统调用的处理
 
-#include "ch05.h"
+#include "unp.h"
 #include <signal.h>
 #include <sys/wait.h>
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 	for( ; ; )
 	{
 		clilen = sizeof(cliaddr);
-		if((connfd = Accept(listenfd,(struct sockaddr *)&cliaddr,&clilen)) < 0 )
+		if((connfd = accept(listenfd,(struct sockaddr *)&cliaddr,&clilen)) < 0 )
 		{
 			if(errno == EINTR)          //处理被信号中断的系统调用
 				continue;
