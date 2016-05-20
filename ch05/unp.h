@@ -65,97 +65,19 @@ pid_t Fork();
 void Inet_pton(int family, const char *strptr, void *addrptr);
 
 //往一个描述符写n个字节
-ssize_t Writen(int fd, const void *vptr, size_t n)
-{
-	size_t nleft;
-	ssize_t nwritten;
-	const char *ptr;
-	
-	ptr = (char *)vptr;   //不强制转换也是对的
-	nleft = n;
-	while (nleft > 0)
-	{
-		if((nwritten = write(fd,ptr,nleft)) <= 0)
-		{
-			if(nwritten < 0 && errno == EINTR)
-				nwritten = 0;            //当前被系统信号中断，再次调用write()
-			else
-				return -1;        //error
-		}
-		nleft -= nwritten;
-		ptr += nwritten;
-	}
-	return n;             
-}
-
-
+ssize_t Writen(int fd, const void *vptr, size_t n);
 
 //fgets包裹函数
-char *Fgets(char *buf, int n, FILE *fp)
-{
-	char *tmp = fgets(buf,n,fp);
-	if(ferror(fp) != 0)        //返回非0，则代表着文件流出错
-		err_sys("fgets error");
-
-	return tmp;
-}
-
+char *Fgets(char *buf, int n, FILE *fp);
 
 //从一个描述符读取n字节或者一行,每次读取一个字节，方便查看该字节是否是换行符'\n'
-ssize_t readline(int fd, void *vptr, size_t maxlen)
-{
-	ssize_t n,rc;
-	char c,*ptr;
-
-	ptr = (char *)vptr;
-
-	for(n = 1;n < maxlen;n++)
-	{
-	again:
-		if(( rc = read(fd,&c,1)) == 1)
-		{
-			*ptr++ = c; 
-			if(c == '\n')
-				break;
-		}
-		else if(rc == 0)
-		{
-			*ptr = 0;                  //遇到EOF，结束read
-			return n - 1;              //因为最后读取到的是EOF，不计入字节数。同时'\0'也不计入。
-		}
-		else
-		{
-			if(errno == EINTR)
-				goto again;
-			return -1;
-		}
-	}
-
-	*ptr = 0;
-	return n;
-}
-
+ssize_t readline(int fd, void *vptr, size_t maxlen);
 
 //readline的包裹函数
-ssize_t Readline(int fd, void *vptr, size_t maxlen)
-{
-	ssize_t n;
-	if((n = readline(fd,vptr,maxlen)) == -1)
-		err_sys("readline error");
-
-	return n;
-}
+ssize_t Readline(int fd, void *vptr, size_t maxlen);
 
 //fputs的包裹函数
-void Fputs(const char *str, FILE *fp)
-{
-	if(fputs(str,fp) == EOF)
-		err_sys("fputs error");
-
-	return;
-}
-
-
+void Fputs(const char *str, FILE *fp);
 
 #endif
 
