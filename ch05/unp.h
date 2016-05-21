@@ -76,6 +76,12 @@ ssize_t readline(int fd, void *vptr, size_t maxlen);
 //readline的包裹函数
 ssize_t Readline(int fd, void *vptr, size_t maxlen);
 
+//readn的包裹函数
+ssize_t Readn(int fd, void *vptr, size_t n);
+
+//从一个描述符读n字节
+ssize_t readn(int fd, void *vptr, size_t n);
+
 //fputs的包裹函数
 void Fputs(const char *str, FILE *fp);
 
