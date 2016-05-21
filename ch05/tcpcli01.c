@@ -6,6 +6,7 @@ int main(int argc,char **argv)
 {
 	int sockfd;
 	struct sockaddr_in servaddr;
+//	FILE *fp = fopen("data","r");   //测试二进制文件
 
 	if(argc != 2)
 		err_quit("usage: tcpcli01 <Server IPaddress>");
@@ -19,8 +20,10 @@ int main(int argc,char **argv)
 	Inet_pton(AF_INET,argv[1],&servaddr.sin_addr);
 
 	Connect(sockfd,(struct sockaddr *)&servaddr,sizeof(servaddr));
-
+	
 	str_cli(stdin, sockfd);
+	
+//	str_cli(fp, sockfd);
 
 	exit(0);
 	
