@@ -38,6 +38,7 @@
 int select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset, const struct timeval *timeout);
 		//作用：允许进程指示内核等待多个事件中的任何一个发生，并只在一个或多个事件发生或经历一段指定的时间后才唤醒它，多用于I/O复用（即I/O多路转接）；
 		//返回：若成功，返回准备就绪的描述符数目；若超时，返回0；若出错，返回-1
+		//注：函数的最后一个参数在linux-4.2.0-36的版本下是没有const修饰词的，本机为Ubuntu15.10即是如此。
 ```
 > select中timeout参数有三种可能：     
 * 设为**空指针NULL**，代表着永远等待下去，直到指定的描述符中有准备好的或者捕捉到一个信号才返回。  
@@ -70,7 +71,8 @@ fd_set中该描述符所在的位设为**1**(fd_set的实现一般都是将每�
 |待处理错误 | * | * | |
 |TCP带外数据 | | | * |
 
-* select函数的缺陷之一有**最大的描述符数限制**，\<sys/types.h\>中的FD_SETSIZE（APUE中说经常是1024,且定义在sys/select.h中）。
+* select函数的缺陷之一有**最大的描述符数限制**，\<sys/types.h\>中的**FD_SETSIZE**（APUE中说经常是1024,且定义在sys/select.h中）。
+
 
 
 
