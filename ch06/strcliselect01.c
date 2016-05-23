@@ -1,4 +1,5 @@
 //使用select实现客户程序
+//当服务器关闭它那一端时的连接时客户可以立即收到通知
 
 #include "unp.h"
 
@@ -29,7 +30,7 @@ void str_cli(FILE *fp, int sockfd)
 			Fputs(recvline, stdout);
 		}
 
-		if(FD_ISSET(fileno(fp), &rset))   //读取终端文本
+		if(FD_ISSET(fileno(fp), &rset))   //读取终端文本,此处代表着select中已经检测出一行文本输入完毕了，而不是由fgets进行堵塞来读入一行文本。
 		{
 			if(Fgets(sendline, MAXLINE, fp) == NULL)
 				return;
