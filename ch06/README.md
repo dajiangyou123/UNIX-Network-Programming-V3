@@ -70,7 +70,7 @@ fd_set中该描述符所在的位设为**1**(fd_set的实现一般都是将每�
 |待处理错误 | * | * | |
 |TCP带外数据 | | | * |
 
-* select函数的缺陷之一有最大的描述符限制，<sys/types.h>中的FD_SETSIZE（APUE中说经常是1024,且定义在sys/select.h中）。
+* select函数的缺陷之一有**最大的描述符数限制**，\<sys/types.h\>中的FD_SETSIZE（APUE中说经常是1024,且定义在sys/select.h中）。
 
 
 
