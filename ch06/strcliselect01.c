@@ -34,7 +34,6 @@ void str_cli(FILE *fp, int sockfd)
 		{
 			if(Fgets(sendline, MAXLINE, fp) == NULL)
 				return;
-
 			Writen(sockfd, sendline, strlen(sendline));
 		}
 	}
