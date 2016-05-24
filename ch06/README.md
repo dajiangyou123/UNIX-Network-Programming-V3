@@ -96,3 +96,38 @@ int shutdown(int sockfd, int howto);
 * 对I/O操作**设置超时**。
 
 
+###8. pselect函数
+```C
+#include <sys/select.h>
+#include <signal.h>
+#include <time.h>
+
+int pselect(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset, const struct timespec *timeout, const sigset_t *sigmask);
+		//作用：和select方法类似，但是加了一个参数，可以在阻塞过程中屏蔽一些指定的信号，第五个参数类型是timespec而不是timeval。
+		//返回：若有就绪描述符则为其数目，若超时则为0，若出错则为-1.
+```
+
+
+###9. poll函数
+```C
+#include <poll.h>
+
+int poll(struct pollfd *fdarray, nfds_t nfds, int timeout);
+		//作用：与select类似，这个中间类型是APUE上面的类型，本机也是这个类型
+		//返回：若有就绪描述符则为其数目，若超时则为0，若出错则为-1.
+```
+> 第一个参数是指向一个结构数组第一个元素的指针，每个数组元素都是一个pollfd结构。   
+
+```C
+struct pollfd
+{
+	int fd;          //描述符
+	short events;    //检测的条件
+	short revents;   //返回的结果
+};
+```
+
+
+
+
+

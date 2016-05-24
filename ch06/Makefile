@@ -1,5 +1,5 @@
 #要生成的最后执行文件
-PROGS = tcpcliselect01 tcpserv04 tcpcliselect02 tcpservselect01
+PROGS = tcpcliselect01 tcpserv04 tcpcliselect02 tcpservselect01 tcpservpoll01
 
 #共享中间库
 MIDDLELIB = error.o wrapsock.o  fgets.o readline.o write.o fputs.o signal.o writen.o readn.o read.o
@@ -26,6 +26,12 @@ tcpcliselect02: tcpcli01.o strcliselect02.o select.o shutdown.o $(MIDDLELIB)
 #使用单进程和select的TCP服务器程序
 tcpservselect01: tcpservselect01.o select.o $(MIDDLELIB)
 	cc $(CFLAGS) -o $@ $^ 
+
+
+
+#使用poll实现单进程的TCP服务器程序
+tcpservpoll01: tcpservpoll01.o poll.o $(MIDDLELIB)
+	cc $(CFLAGS) -o $@ $^
 
 .PHONY: clean
 

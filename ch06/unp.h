@@ -16,6 +16,7 @@
 #include <sys/select.h>
 #include <sys/time.h>
 #include <math.h>
+#include <poll.h>
 
 #define MAXLINE 1024 
 #define LISTENQ 128
@@ -96,6 +97,9 @@ int Select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset, st
 
 //shutdown的包裹函数
 int Shutdown(int sockfd, int howto);
+
+//poll的包裹函数
+int Poll(struct pollfd *fdarray, nfds_t nfds, int timeout);
 
 #endif
 
