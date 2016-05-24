@@ -85,12 +85,17 @@ ssize_t Readn(int fd, void *vptr, size_t n);
 //从一个描述符读n字节
 ssize_t readn(int fd, void *vptr, size_t n);
 
+//read的包裹函数
+ssize_t Read(int fd, void *buf, size_t nbytes);
+
 //fputs的包裹函数
 void Fputs(const char *str, FILE *fp);
 
 //select的包裹函数
 int Select(int maxfdp1, fd_set *readset, fd_set *writeset, fd_set *exceptset, struct timeval *timeout);
 
+//shutdown的包裹函数
+int Shutdown(int sockfd, int howto);
 
 #endif
 

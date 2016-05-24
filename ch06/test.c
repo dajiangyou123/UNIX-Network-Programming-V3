@@ -7,7 +7,9 @@ int main()
 	while(1)
 	{
 		fgets(s,100,stdin);
-		printf("%s",s);
+		printf("%s %ld",s,strlen(s));
 	}
+
+	printf("%d\n",fileno(stdin));
 	return 0;
 }
