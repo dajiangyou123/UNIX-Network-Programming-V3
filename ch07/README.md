@@ -25,7 +25,7 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
 对套接字发生错误的记录。若发生错误时阻塞在**select**的调用上时，可读和可写均满足条件。若进程采用了**信号驱动式I/O模型**，那么给进程或进程组产生一个SIGIO信号。
 这**两种情况**返回后，可以使用getsockopt访问SO_ERROR得到待处理错误。随后so_error被**内核复位为0**。  
 如果调用read且**没有数据返回**时，read返回-1，且errno值被设定为so_error，随后so_error被**内核复位为0**。如果**有数据返回**时，则read返回数据而不是返回错误条件。   
-如果调用write时so_error非0，write返回-1，且errno值被设定为so_error，随后so_error被**内核复位为0**。**一个套接字上错误一旦返回给用户进行，它的so_error就得复位为0.   
+如果调用write时so_error非0，write返回-1，且errno值被设定为so_error，随后so_error被**内核复位为0**。**一个套接字上错误一旦返回给用户，它的so_error就得复位为0.   
 5. **SO_KEEPSLIVE**套接字选项   
 设定一个**TCP套接字**的保持存活选项,如果**2个小时**内在该套接字的任一方向上都没有数据交换，TCP就自动给对端发送一个**保持存活探测分节**。这个2小时可以在内核中修改，不过一般不改动。本选项的功能是**检测对端主机是否崩溃或变得不可达**。有些服务器一般采取提供一个分钟量级的**应用层超时**机制来进行清除不可达用户。    
 6. **SO_LINGER**套接字选项   
@@ -110,6 +110,8 @@ if(fcntl(fd, F_SETFL, flags) < 0)
 > 同理，可以设置**O_ASYNC状态标志**实现**信号驱动式I/O**。 F_SETOWN命令可以指定用于接收SIGIO和SIGURG信号的套接字属主(进程ID或进程组ID)。F_GETOWN命令可以获取套接字的当前属主。   
 
 
+###6. MSS的确认过程
+![MSS](http://support.huawei.com/ecommunity/showimage-10046033-10000035-3dc1c985b373f42e71487a9fde7992d7.jpg)
 
 
 
