@@ -111,7 +111,7 @@ if(fcntl(fd, F_SETFL, flags) < 0)
 
 
 ###6. MSS的确认过程
-![MSS](http://support.huawei.com/ecommunity/showimage-10046033-10000035-3dc1c985b373f42e71487a9fde7992d7.jpg)
+![MSS](cl.ly/0t0F3Y1v0P0H)
 
 
 
