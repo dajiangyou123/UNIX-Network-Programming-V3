@@ -111,7 +111,7 @@ if(fcntl(fd, F_SETFL, flags) < 0)
 
 
 ###6. MSS的确认过程
-![MSS](cl.ly/0t0F3Y1v0P0H)
+![MSS](http://s3.amazonaws.com/f.cl.ly/items/3k3p0s3A0G0o1p2l3l40/showimage-10046033-10000035-3dc1c985b373f42e71487a9fde7992d7.jpg)
 
 
 
