@@ -107,7 +107,9 @@ if(fcntl(fd, F_SETFL, flags) < 0)
 	err_sys("F_SETFL error");
 ```
 
-> 同理，可以设置O_ASYNC状态标志实现信号驱动式I/O。 F_SETOWN命令可以指定用于接收SIGIO和SIGURG信号的套接字属主(进程ID或进程组ID)。F_GETOWN命令可以获取套接字的当前属主。   
+> 同理，可以设置**O_ASYNC状态标志**实现**信号驱动式I/O**。 F_SETOWN命令可以指定用于接收SIGIO和SIGURG信号的套接字属主(进程ID或进程组ID)。F_GETOWN命令可以获取套接字的当前属主。   
+
+
 
 
 
