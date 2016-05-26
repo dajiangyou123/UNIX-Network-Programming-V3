@@ -43,7 +43,76 @@ TCP套接字缓冲区的大小至少应该是相应连接的MSS值的**四倍**�
 设定套接字的接收和发送的超时值。默认是0，代表着不设置超时。      
 接收超时影响5个**输入**函数：read、readv、recv、recvfrom和recvmsg。   
 发送超时影响5个**输出**函数：write、writev、send、sendto和sendmsg。    
-11. **SO_REUSEADDR**和**SO_REUSEPORT**套接字选项  
+11. **SO_REUSEADDR**和**SO_REUSEPORT**套接字选项   
+**SO_REUSEADDR**允许多个IP地址绑定一个端口，允许多个套接字绑定相同的IP地址和相同的端口（仅UDP，一般用于多播）。**SO_REUSEPORT**允许**完全重复的绑定**，不过所有绑定的套接字都得开启这个选项，同时这个选项**并不是**所有的系统都提供了实现。   
+12. **SO_TYPE**套接字选项   
+本选项返回套接字的类型，如SOCK_STREAM等整数值。本选项通常由启动时继承了套接字的进程使用。    
+13. **SO_USELOOPBACK**套接字选项   
+本选项仅用于**路由域(AF_ROUTE)的套接字。默认是打开（这是唯一一个默认打开的SO_xxx二元套接字选项）。当本选项开启时，相应套接字将接收在其上发送的任何数据报的一个副本。   
+
+
+###3. IPv4套接字选项   
+>
+1. **IP_HDRINCL**套接字选项    
+开启本选项可以自己构造完整的IP首部，一般用于原始IP套接字。   
+2. **IP_OPTIONS**套接字选项  
+本选项的设置允许我们在IPv4首部中设置IP选项。   
+3. **IP_RECVDSTADDR**套接字选项   
+本套接字选项导致所收到的**UDP数据报的目的IP地址**由recvmsg函数作为辅助数据返回。   
+4. **IP_RECVIF**套接字选项  
+本套接字选项导致所收到的**UDP数据报的接收接口索引**由recvmsg函数作为辅助数据返回。    
+5. **IP_TOS**套接字选项   
+设置IP首部中的服务类型和优先权。    
+6. **IP_TTL**套接字选项   
+设置和获取给某个给定套接字发送的单播分组上的默认TTL。TCP和UDP默认是64，原始套接字默认是255。和TOS字段一样，调用getsockopt只能获得**外出数据报的字段的默认值**，**接收到**的IP数据报**无法获取**。     
+
+
+###4. TCP套接字选项  
+>
+1. **TCP_MAXSEG**套接字选项   
+通过本选项可以获取和设置TCP连接的最大分节大小（MSS）。一般都是建立连接时，对方使用SYN通告的。通过其选项设置MSS有的实现中不一定支持，且若可以设置，一般只能减小，不能增加，因为这已经是每个分节的最大数据量了。   
+2. **TCP_NODELAY**套接字选项   
+开启本选项将**禁止TCP的Nagle算法**，默认该算法是开启的。   
+
+
+###5. fcntl函数  
+```C
+#include <fcntl.h>
+
+int fcntl(int fd, int cmd, ... /* int arg */);
+		//作用：获取或改变描述符的属性
+		//返回：若成功则取决于cmd，若出错则为-1
+```
+
+> 对于非阻塞式I/O设置的常用代码    
+
+```C
+int flags;
+
+//获取之前的文件状态标志，不可以直接设置，否则会清除之前的其他文件状态标志   
+if((flags = fcntl(fd, F_GETFL, 0)) < 0)
+	err_sys("F_GETFL error");
+
+flags |= O_NONBLOCK;  
+if(fcntl(fd, F_SETFL, flags) < 0)
+	err_sys("F_GETFL error");
+
+```
+
+> 关闭非阻塞式标志的常用代码   
+
+```C
+flags &= ~O_NONBLOCK;
+if(fcntl(fd, F_SETFL, flags) < 0)
+	err_sys("F_SETFL error");
+```
+
+> 同理，可以设置O_ASYNC状态标志实现信号驱动式I/O。 F_SETOWN命令可以指定用于接收SIGIO和SIGURG信号的套接字属主(进程ID或进程组ID)。F_GETOWN命令可以获取套接字的当前属主。   
+
+
+
+
+
 
 
 
