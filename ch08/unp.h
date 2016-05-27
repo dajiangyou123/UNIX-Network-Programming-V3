@@ -17,6 +17,7 @@
 #include <sys/time.h>
 #include <math.h>
 #include <poll.h>
+#include <malloc.h>
 
 #define MAXLINE 1024 
 #define LISTENQ 128
@@ -115,6 +116,9 @@ ssize_t Sendto(int sockfd, const void *buff, size_t nbytes, int flags, const str
 void dg_echo(int sockfd, struct sockaddr *pcliaddr, socklen_t clilen);
 
 //udp回射，客户端函数
-void dg_cli(FILE *fp, int sockfd, struct sockaddr *pservaddr, socklen_t servlen);
+void dg_cli(FILE *fp, int sockfd, const struct sockaddr *pservaddr, socklen_t servlen);
+
+//malloc的包裹函数
+void* Malloc(size_t size);
 
 #endif

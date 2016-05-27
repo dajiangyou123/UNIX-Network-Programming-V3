@@ -1,7 +1,7 @@
 #include "unp.h"
 
 //udp回射，客户端函数
-void dg_cli(FILE *fp, int sockfd, struct sockaddr *pservaddr, socklen_t servlen)
+void dg_cli(FILE *fp, int sockfd, const struct sockaddr *pservaddr, socklen_t servlen)
 {
 	int n;
 	char sendline[MAXLINE], recvline[MAXLINE + 1];
