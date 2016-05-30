@@ -1,14 +1,11 @@
 //自定义的信号处理函数
 
-#ifndef _SIGNAL_C
-#define _SIGNAL_C
 
 #include "unp.h"
-#include <signal.h>
 
 typedef void Sigfunc(int);
 
-Sigfunc *signal(int signo, Sigfunc *func)
+Sigfunc *_signal(int signo, Sigfunc *func)
 {
 	struct sigaction act, oact;
 
@@ -36,4 +33,12 @@ Sigfunc *signal(int signo, Sigfunc *func)
 }
 
 
-#endif
+Sigfunc* Signal(int signo, Sigfunc *func)
+{
+	Sigfunc *sigfunc;
+
+	if((sigfunc = _signal(signo, func)) == SIG_ERR)
+		err_sys("signal error");
+
+	return sigfunc;
+}

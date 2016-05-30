@@ -18,6 +18,7 @@
 #include <math.h>
 #include <poll.h>
 #include <malloc.h>
+#include <signal.h>
 
 #define MAXLINE 1024 
 #define LISTENQ 128
@@ -120,5 +121,17 @@ void dg_cli(FILE *fp, int sockfd, const struct sockaddr *pservaddr, socklen_t se
 
 //malloc的包裹函数
 void* Malloc(size_t size);
+
+//signal的包裹函数，其中signal也是自己写的,非系统自带的
+void (*Signal(int signo, void (*)(int))) (int);
+
+//setsockopt的包裹函数
+int Setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
+
+//getsockopt的包裹函数
+int Getsockopt(int sockfd, int level, int optname, void *optval, socklen_t *optlen);
+
+//getsockname的包裹函数
+int Getsockname(int sockfd, struct sockaddr *localaddr, socklen_t *addrlen);
 
 #endif
