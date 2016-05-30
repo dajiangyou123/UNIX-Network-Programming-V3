@@ -35,8 +35,11 @@ void err_quit(const char *fmt,...);
 //处理函数出错信息，但是打印errno值所代表的含义
 void err_sys(const char* fmt,...);
 
-//仅仅输出出错信息，不退出程序
+//仅仅输出出错信息与errno值所代表的错误信息，不退出程序
 void err_ret(const char* fmt,...);
+
+//仅仅输出错误提示信息，不退出程序也不输出errno值相关信息
+void err_msg(const char* fmt,...);
 
 //具体执行打印出错信息的函数
 static void err_doit(int errnoflag,int level,const char *fmt,va_list ap);
@@ -74,6 +77,8 @@ pid_t Fork();
 //inet_pton的包裹函数
 void Inet_pton(int family, const char *strptr, void *addrptr);
 
+//Inet_ntop的包裹函数
+const char *Inet_ntop(int family, const void *addrptr, char *strptr, size_t len);
 
 //往一个描述符写n个字节
 ssize_t Writen(int fd, const void *vptr, size_t n);
@@ -107,7 +112,6 @@ int Shutdown(int sockfd, int howto);
 
 //poll的包裹函数
 int Poll(struct pollfd *fdarray, nfds_t nfds, int timeout);
-
 
 //recvfrom的包裹函数
 ssize_t Recvfrom(int sockfd, void *buff, size_t nbytes, int flags, struct sockaddr *from, socklen_t *addrlen);

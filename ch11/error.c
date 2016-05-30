@@ -29,7 +29,7 @@ void err_sys(const char *fmt,...)
 	exit(1);
 }
 
-//仅仅输出出错信息，不退出程序
+//仅仅输出出错信息与errno值所代表的错误信息，不退出程序
 void err_ret(const char* fmt,...)
 {
 	
@@ -42,6 +42,17 @@ void err_ret(const char* fmt,...)
 	return;
 }
 
+//仅仅输出错误提示信息，不退出程序也不输出errno值相关信息
+void err_msg(const char* fmt,...)
+{
+	va_list ap;
+	
+	va_start(ap,fmt);
+	err_doit(0,LOG_INFO,fmt,ap);
+	va_end(ap);
+
+	return;
+}
 
 //具体执行打印出错信息的函数
 static void err_doit(int errnoflag,int level,const char *fmt,va_list ap)
